@@ -13,10 +13,16 @@ index.php at the bottom.
 The files live in these directories:
 
 /home/pi/lighthouse/boot.sh
+
 /home/pi/.config/wayfire.ini
+
 /var/www/html/index.php
+
 /var/www/html/izakaya.png
+
 /var/www/html/style.css
+
 /var/www/html/lighthouse.py
+
 
 See howto.pdf to building and setting up the R-Pi.
