@@ -1,0 +1,73 @@
+Lighting Control 
+Example: for Izakaya small lighted models with gpio controlled loads
+J. Nolan
+Licensed: Public Domain (for information and learning only)
+21-Dec-2023
+
+Setup steps:
+1. Setup raspberry Pi with latest 64bit (bookworm).
+
+2. Make Hostname: lighthouse
+	sudo raspi-config
+	System Options -> Hostname
+
+3. Turn on SSH (useful for debugging later):
+	In raspi-config choose Interface Options->SSH-enable
+	Or add a blank file called: SSH to the bootfs partitioning
+
+4. Turn on VNC
+	In raspi-config choose Interface Options->VNC-enable
+5. Reboot
+
+6. Transfer the files below to your Pi using ftp/scp/gmail/ect.
+
+7. Move/copy these files from git:
+	/home/pi/.config/wayfire.init
+	This file boots the python script that runs the on off timer
+	/home/pi/lighthouse/boot.sh
+	Make this executable: chmod +x boot.sh
+	This is called by the wayfire.ini on boot up.
+
+8. It will launch one instance of /var/www/html/lighthouse -timer
+	Lighthouse -timer stays resident in memory and sets the lights all on and off based on the contents of /var/www/html/.startstop which is created by setting the time 
+9. VNC into lighthouse.local
+
+10. At command prompt install the following:
+	sudo apt-get update
+	sudo apt-get upgrade
+
+11. Install Apache 2:
+	sudo apt install apache2 -y
+
+12. Give ownership to all files and folders in the /var/www/html directory to the www-data group:
+	sudo usermod -a -G www-data pi
+	sudo chown -R -f www-data:www-data /var/www/html
+
+13. Install PHP:
+	sudo apt install php -y
+
+14. Download files from my github:
+	In a directory like /home/pi/lighthouse for example
+	git clone https://github.com/totorodad/lighthouse.git
+
+15. Copy the files as needed:
+	cp index.php izakaya.png lighthouse.py styles.css /var/www/html
+	Make files bootable:
+		chmod +x /home/pi/lighthouse/boot.sh
+		chmod +x /var/www/html/lighthouse.py
+
+16. Add the following two lines to the end of /home/pi/.config/wayfire.ini
+	[autostart]
+	Terminal = lxterminal -e $HOME/lighthouse/boot.sh
+
+17. Give Apache (www-data) user the ability to run python as root without password:
+	sudo -s
+	nano /etc/sudoers.d/010_pi-nopasswd
+	Add this line to the bottom:
+		www-data ALL=(ALL) NOPASSWD: /usr/bin/python3
+	Note to user.  This may create a cybersecurity hole.  Use this technique on systems protected by firewall or other means.
+
+18. Reboot
+	Open web browser to lighthouse.local
+	Turn lights on/off to verify the lighthouse.py python program is working.
+	Set and test the timer.
