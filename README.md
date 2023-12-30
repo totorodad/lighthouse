@@ -25,4 +25,4 @@ The files live in these directories:
 /var/www/html/lighthouse.py
 
 
-See **howto.pdf** to building and setting up the R-Pi.
+See **howto.txt** to building and setting up the R-Pi.
